@@ -10,7 +10,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: nfs-pv-sql
+  storageClassName: sql
   mountOptions:
     - hard
     - nfsvers=4.1

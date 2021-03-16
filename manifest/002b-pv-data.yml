@@ -10,7 +10,7 @@ spec:
   accessModes:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: nfs-pv-data
+  storageClassName: data
   mountOptions:
     - hard
     - nfsvers=4.1
