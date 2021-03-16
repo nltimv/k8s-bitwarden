@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: bitwarden-mssql
+  namespace: bitwarden
+spec:
+  selector:
+    app: bitwarden-mssql
+  ports:
+  - port: 1433
+    targetPort: 1433
+
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: bitwarden-mssql
+  namespace: bitwarden
+spec:
+  selector:
+    matchLabels:
+      app: bitwarden-mssql
+  serviceName: bitwarden-mssql
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: bitwarden-mssql
+      namespace: bitwarden
+    spec:
+      containers:
+      - name: bitwarden-mssql
+        image: bitwarden/mssql:latest
+        ports:
+        - containerPort: 1433
+          name: sql
+        volumeMounts:
+        - name: pvc-sql
+          mountPath: /var/opt/mssql
+      volumes:
+        - name: pvc-sql
+          persistentVolumeClaim:
+            claimName: nfs-pvc-sql
