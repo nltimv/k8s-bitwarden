@@ -35,6 +35,9 @@ spec:
         ports:
         - containerPort: 1433
           name: sql
+        envFrom:
+          - configMapRef:
+             name: bitwarden-sql-config
         volumeMounts:
         - name: pvc-sql
           mountPath: /var/opt/mssql

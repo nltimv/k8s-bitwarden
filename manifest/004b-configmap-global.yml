@@ -4,6 +4,17 @@ metadata:
   name: bitwarden-global-config
   namespace: bitwarden
 data:
+  ASPNETCORE_ENVIRONMENT: Production
+  globalSettings__selfHosted: "true"
+  globalSettings__baseServiceUri__internalNotifications: "http://bitwarden-notifications"
+  globalSettings__baseServiceUri__internalAdmin: "http://bitwarden-admin"
+  globalSettings__baseServiceUri__internalIdentity: "http://bitwarden-identity"
+  globalSettings__baseServiceUri__internalApi: "http://bitwarden-api"
+  globalSettings__baseServiceUri__internalVault: "http://bitwarden-web"
+  globalSettings__baseServiceUri__internalSso: "http://bitwarden-sso"
+  globalSettings__baseServiceUri__internalPortal: "http://bitwarden-portal"
+  globalSettings__pushRelayBaseUri: "https://push.bitwarden.com"
+  globalSettings__installation__identityUri: "https://identity.bitwarden.com"
   globalSettings__baseServiceUri__vault: "https://bitwarden.example.com"
   globalSettings__baseServiceUri__api: "https://bitwarden.example.com/api"
   globalSettings__baseServiceUri__identity: "https://bitwarden.example.com/identity"
@@ -11,7 +22,7 @@ data:
   globalSettings__baseServiceUri__notifications: "https://bitwarden.example.com/notifications"
   globalSettings__baseServiceUri__sso: "https://bitwarden.example.com/sso"
   globalSettings__baseServiceUri__portal: "https://bitwarden.example.com/portal"
-  globalSettings__sqlServer__connectionString: "Data Source: tcp:mssql,1433;Initial Catalog: vault;Persist Security Info: False;User ID: sa;Password: RANDOM_DATABASE_PASSWORD;MultipleActiveResultSets: False;Connect Timeout: 30;Encrypt: True;TrustServerCertificate: True"
+  globalSettings__sqlServer__connectionString: "Data Source: tcp:bitwarden-mssql,1433;Initial Catalog: vault;Persist Security Info: False;User ID: sa;Password: RANDOM_DATABASE_PASSWORD;MultipleActiveResultSets: False;Connect Timeout: 30;Encrypt: True;TrustServerCertificate: True"
   globalSettings__identityServer__certificatePassword: "IDENTITY_CERT_PASSWORD"
   globalSettings__attachment__baseDirectory: "/etc/bitwarden/core/attachments"
   globalSettings__attachment__baseUrl: "https://bitwarden.example.com/attachments"
