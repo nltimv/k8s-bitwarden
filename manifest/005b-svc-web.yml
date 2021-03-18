@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: bitwarden-web
+  namespace: bitwarden
+spec:
+  selector:
+    app: bitwarden-web
+  ports:
+  - port: 80
+    targetPort: 5000
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bitwarden-web
+  namespace: bitwarden
+spec:
+  selector:
+    matchLabels:
+      app: bitwarden-web
+  template:
+    metadata:
+      labels:
+        app: bitwarden-web
+      namespace: bitwarden
+    spec:
+      containers:
+      - name: bitwarden-web
+        image: bitwarden/web:latest
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+        ports:
+        - name: http
+          containerPort: 5000
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+          failureThreshold: 1
+          periodSeconds: 10
+        startupProbe:
+          httpGet:
+            path: /
+            port: http
+          failureThreshold: 10
+          periodSeconds: 10
+        envFrom:
+          - configMapRef: 
+             name: bitwarden-global-config
+        volumeMounts:
+        - name: pvc-data
+          mountPath: /etc/bitwarden
+      volumes:
+      - name: pvc-data
+        persistentVolumeClaim:
+          claimName: nfs-pvc-data

@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: bitwarden-identity
+  namespace: bitwarden
+spec:
+  selector:
+    app: bitwarden-identity
+  ports:
+  - port: 80
+    targetPort: 5000
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bitwarden-identity
+  namespace: bitwarden
+spec:
+  selector:
+    matchLabels:
+      app: bitwarden-identity
+  template:
+    metadata:
+      labels:
+        app: bitwarden-identity
+      namespace: bitwarden
+    spec:
+      containers:
+      - name: bitwarden-identity
+        image: bitwarden/identity:latest
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+        ports:
+        - name: http
+          containerPort: 5000
+        livenessProbe:
+          httpGet:
+            path: /.well-known/openid-configuration
+            port: http
+          failureThreshold: 1
+          periodSeconds: 10
+        startupProbe:
+          httpGet:
+            path: /.well-known/openid-configuration
+            port: http
+          failureThreshold: 10
+          periodSeconds: 10
+        envFrom:
+          - configMapRef: 
+             name: bitwarden-global-config
+        volumeMounts:
+        - name: pvc-data
+          mountPath: /etc/bitwarden
+      volumes:
+      - name: pvc-data
+        persistentVolumeClaim:
+          claimName: nfs-pvc-data

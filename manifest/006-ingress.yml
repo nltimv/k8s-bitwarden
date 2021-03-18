@@ -1,0 +1,79 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: bitwarden-ingress
+  namespace: bitwarden
+  labels:
+      name: bitwarden-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  rules:
+  - host: bitwarden.example.com
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/()(.*)"
+        backend:
+          service:
+            name: bitwarden-web
+            port: 
+              number: 80
+      - pathType: Prefix
+        path: "/api(/|$)(.*)"
+        backend:
+          service:
+            name: bitwarden-api
+            port: 
+              number: 80
+      - pathType: Prefix
+        path: "/identity(/|$)(.*)"
+        backend:
+          service:
+            name: bitwarden-identity
+            port: 
+              number: 80
+      - pathType: Prefix
+        path: "/admin(/|$)(.*)"
+        backend:
+          service:
+            name: bitwarden-admin
+            port: 
+              number: 80
+      - pathType: Prefix
+        path: "/notifications(/|$)(.*)"
+        backend:
+          service:
+            name: bitwarden-notifications
+            port: 
+              number: 80
+      - pathType: Prefix
+        path: "/sso(/|$)(.*)"
+        backend:
+          service:
+            name: bitwarden-sso
+            port: 
+              number: 80
+      - pathType: Prefix
+        path: "/portal(/|$)(.*)"
+        backend:
+          service:
+            name: bitwarden-portal
+            port: 
+              number: 80
+      - pathType: Prefix
+        path: "/attachments(/|$)(.*)"
+        backend:
+          service:
+            name: bitwarden-attachments
+            port: 
+              number: 80
+      - pathType: Prefix
+        path: "/icons(/|$)(.*)"
+        backend:
+          service:
+            name: bitwarden-icons
+            port: 
+              number: 80
+        
