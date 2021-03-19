@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: bitwarden-identity
+  name: bitwarden-notifications
   namespace: bitwarden
 spec:
   selector:
-    app: bitwarden-identity
+    app: bitwarden-notifications
   ports:
   - port: 80
     targetPort: 5000
@@ -15,37 +15,37 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: bitwarden-identity
+  name: bitwarden-notifications
   namespace: bitwarden
 spec:
   selector:
     matchLabels:
-      app: bitwarden-identity
+      app: bitwarden-notifications
   template:
     metadata:
       labels:
-        app: bitwarden-identity
+        app: bitwarden-notifications
       namespace: bitwarden
     spec:
       containers:
-      - name: bitwarden-identity
-        image: bitwarden/identity:latest
+      - name: bitwarden-notifications
+        image: bitwarden/notifications:latest
         resources:
           limits:
             memory: "128Mi"
-            cpu: "100m"
+            cpu: "50m"
         ports:
         - name: http
           containerPort: 5000
         livenessProbe:
           httpGet:
-            path: /.well-known/openid-configuration
+            path: /alive
             port: http
           failureThreshold: 1
           periodSeconds: 10
         startupProbe:
           httpGet:
-            path: /.well-known/openid-configuration
+            path: /alive
             port: http
           failureThreshold: 10
           periodSeconds: 10
@@ -58,4 +58,4 @@ spec:
       volumes:
       - name: pvc-data
         persistentVolumeClaim:
-          claimName: nfs-pvc-data
+          claimName: bitwarden-data-pvc

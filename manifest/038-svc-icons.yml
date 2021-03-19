@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: bitwarden-api
+  name: bitwarden-icons
   namespace: bitwarden
 spec:
   selector:
-    app: bitwarden-api
+    app: bitwarden-icons
   ports:
   - port: 80
     targetPort: 5000
@@ -15,25 +15,25 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: bitwarden-api
+  name: bitwarden-icons
   namespace: bitwarden
 spec:
   selector:
     matchLabels:
-      app: bitwarden-api
+      app: bitwarden-icons
   template:
     metadata:
       labels:
-        app: bitwarden-api
+        app: bitwarden-icons
       namespace: bitwarden
     spec:
       containers:
-      - name: bitwarden-api
-        image: bitwarden/api:latest
+      - name: bitwarden-icons
+        image: bitwarden/icons:latest
         resources:
           limits:
             memory: "128Mi"
-            cpu: "200m"
+            cpu: "50m"
         ports:
         - name: http
           containerPort: 5000
@@ -58,4 +58,4 @@ spec:
       volumes:
       - name: pvc-data
         persistentVolumeClaim:
-          claimName: nfs-pvc-data
+          claimName: bitwarden-data-pvc

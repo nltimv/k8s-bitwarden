@@ -58,4 +58,4 @@ spec:
       volumes:
       - name: pvc-data
         persistentVolumeClaim:
-          claimName: nfs-pvc-data
+          claimName: bitwarden-data-pvc

@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: bitwarden-notifications
+  name: bitwarden-admin
   namespace: bitwarden
 spec:
   selector:
-    app: bitwarden-notifications
+    app: bitwarden-admin
   ports:
   - port: 80
     targetPort: 5000
@@ -15,21 +15,21 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: bitwarden-notifications
+  name: bitwarden-admin
   namespace: bitwarden
 spec:
   selector:
     matchLabels:
-      app: bitwarden-notifications
+      app: bitwarden-admin
   template:
     metadata:
       labels:
-        app: bitwarden-notifications
+        app: bitwarden-admin
       namespace: bitwarden
     spec:
       containers:
-      - name: bitwarden-notifications
-        image: bitwarden/notifications:latest
+      - name: bitwarden-admin
+        image: bitwarden/admin:latest
         resources:
           limits:
             memory: "128Mi"
@@ -37,18 +37,6 @@ spec:
         ports:
         - name: http
           containerPort: 5000
-        livenessProbe:
-          httpGet:
-            path: /alive
-            port: http
-          failureThreshold: 1
-          periodSeconds: 10
-        startupProbe:
-          httpGet:
-            path: /alive
-            port: http
-          failureThreshold: 10
-          periodSeconds: 10
         envFrom:
           - configMapRef: 
              name: bitwarden-global-config
@@ -58,4 +46,4 @@ spec:
       volumes:
       - name: pvc-data
         persistentVolumeClaim:
-          claimName: nfs-pvc-data
+          claimName: bitwarden-data-pvc

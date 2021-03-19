@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: bitwarden-portal
+  name: bitwarden-sso
   namespace: bitwarden
 spec:
   selector:
-    app: bitwarden-portal
+    app: bitwarden-sso
   ports:
   - port: 80
     targetPort: 5000
@@ -15,21 +15,21 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: bitwarden-portal
+  name: bitwarden-sso
   namespace: bitwarden
 spec:
   selector:
     matchLabels:
-      app: bitwarden-portal
+      app: bitwarden-sso
   template:
     metadata:
       labels:
-        app: bitwarden-portal
+        app: bitwarden-sso
       namespace: bitwarden
     spec:
       containers:
-      - name: bitwarden-portal
-        image: bitwarden/portal:latest
+      - name: bitwarden-sso
+        image: bitwarden/sso:latest
         resources:
           limits:
             memory: "128Mi"
@@ -58,4 +58,4 @@ spec:
       volumes:
       - name: pvc-data
         persistentVolumeClaim:
-          claimName: nfs-pvc-data
+          claimName: bitwarden-data-pvc

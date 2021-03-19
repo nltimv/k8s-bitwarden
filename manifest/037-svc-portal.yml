@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: bitwarden-admin
+  name: bitwarden-portal
   namespace: bitwarden
 spec:
   selector:
-    app: bitwarden-admin
+    app: bitwarden-portal
   ports:
   - port: 80
     targetPort: 5000
@@ -15,21 +15,21 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: bitwarden-admin
+  name: bitwarden-portal
   namespace: bitwarden
 spec:
   selector:
     matchLabels:
-      app: bitwarden-admin
+      app: bitwarden-portal
   template:
     metadata:
       labels:
-        app: bitwarden-admin
+        app: bitwarden-portal
       namespace: bitwarden
     spec:
       containers:
-      - name: bitwarden-admin
-        image: bitwarden/admin:latest
+      - name: bitwarden-portal
+        image: bitwarden/portal:latest
         resources:
           limits:
             memory: "128Mi"
@@ -37,6 +37,18 @@ spec:
         ports:
         - name: http
           containerPort: 5000
+        livenessProbe:
+          httpGet:
+            path: /alive
+            port: http
+          failureThreshold: 1
+          periodSeconds: 10
+        startupProbe:
+          httpGet:
+            path: /alive
+            port: http
+          failureThreshold: 10
+          periodSeconds: 10
         envFrom:
           - configMapRef: 
              name: bitwarden-global-config
@@ -46,4 +58,4 @@ spec:
       volumes:
       - name: pvc-data
         persistentVolumeClaim:
-          claimName: nfs-pvc-data
+          claimName: bitwarden-data-pvc
