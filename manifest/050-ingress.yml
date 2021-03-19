@@ -10,7 +10,7 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   rules:
-  - host: bitwarden.example.com
+  - host: vault.nltimv.com
     http:
       paths:
       - pathType: Prefix
